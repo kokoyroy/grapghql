@@ -5,13 +5,19 @@ const {
     GraphQLString,
     GraphQLSchema,
     GraphQLID,
-    GraphQLInt
+    GraphQLInt,
+    GraphQLList
 } = graphql;
 
 const books = [
-    { name: 'ta mistika tou valtou', id: '1' },
-    { name: 'ta aytia tou vasilia', id: '2' },
-    { name: 'to mouni kai to delfini oso to xtypas tha xynei', id: '3' },
+    { name: 'ta mistika tou valtou', id: '1', authorID: '1' },
+    { name: 'ta aytia tou vasilia', id: '2', authorID: '2' },
+    { name: 'to mouni kai to delfini oso to xtypas tha xynei', id: '3', authorID: '1' },
+    { name: 'o trelantonis', id: '4', authorID: '2' },
+    { name: 'to kokkori tis asfaltou', id: '5', authorID: '1' },
+    { name: 'ta oxi kai toso mystika toy valtou', id: '6', authorID: '3' },
+    { name: 'to koritsi kai o gypas', id: '6', authorID: '3' },
+    { name: 'ti eixes gianni , eixa panda', id: '6', authorID: '3' },
 ];
 
 const authors = [
@@ -26,6 +32,13 @@ const BookType = new GraphQLObjectType({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
         genre: { type: GraphQLString },
+        author: {
+            type: AuthorType,
+            resolve(parent, args) {
+                console.log(parent);
+                return authors.find(author => author.id === parent.authorID);
+            }
+        }
     })
 });
 
@@ -34,10 +47,15 @@ const AuthorType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
-        age: { type: graphql.GraphQLInt }
+        age: { type: GraphQLInt },
+        books: {
+            type: new GraphQLList(BookType),
+            resolve(parent, args) {
+               return books.filter(book => book.authorID === parent.id);
+            }
+        }
     })
 });
-
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
