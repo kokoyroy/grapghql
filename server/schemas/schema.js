@@ -1,5 +1,6 @@
 const graphql = require("graphql");
-
+const Book = require('../models/book');
+const Author = require('../models/author');
 const {
     GraphQLObjectType,
     GraphQLString,
@@ -9,22 +10,22 @@ const {
     GraphQLList
 } = graphql;
 
-const books = [
-    { name: 'ta mistika tou valtou', id: '1', authorID: '1' },
-    { name: 'ta aytia tou vasilia', id: '2', authorID: '2' },
-    { name: 'to mouni kai to delfini oso to xtypas tha xynei', id: '3', authorID: '1' },
-    { name: 'o trelantonis', id: '4', authorID: '2' },
-    { name: 'to kokkori tis asfaltou', id: '5', authorID: '1' },
-    { name: 'ta oxi kai toso mystika toy valtou', id: '6', authorID: '3' },
-    { name: 'to koritsi kai o gypas', id: '6', authorID: '3' },
-    { name: 'ti eixes gianni , eixa panda', id: '6', authorID: '3' },
-];
+// const books = [
+//     { name: 'ta mistika tou valtou', id: '1', authorID: '1' },
+//     { name: 'ta aytia tou vasilia', id: '2', authorID: '2' },
+//     { name: 'to mouni kai to delfini oso to xtypas tha xynei', id: '3', authorID: '1' },
+//     { name: 'o trelantonis', id: '4', authorID: '2' },
+//     { name: 'to kokkori tis asfaltou', id: '5', authorID: '1' },
+//     { name: 'ta oxi kai toso mystika toy valtou', id: '6', authorID: '3' },
+//     { name: 'to koritsi kai o gypas', id: '6', authorID: '3' },
+//     { name: 'ti eixes gianni , eixa panda', id: '6', authorID: '3' },
+// ];
 
-const authors = [
-    { name: 'kostas kourouklidis', age: 44, id: '1' },
-    { name: 'panagiotis aleksandridis', age: 14, id: '2' },
-    { name: 'eyterpi nikolaou', age: 54, id: '3' },
-];
+// const authors = [
+//     { name: 'kostas kourouklidis', age: 44, id: '1' },
+//     { name: 'panagiotis aleksandridis', age: 14, id: '2' },
+//     { name: 'eyterpi nikolaou', age: 54, id: '3' },
+// ];
 
 const BookType = new GraphQLObjectType({
     name: 'Book',
@@ -36,7 +37,7 @@ const BookType = new GraphQLObjectType({
             type: AuthorType,
             resolve(parent, args) {
                 console.log(parent);
-                return authors.find(author => author.id === parent.authorID);
+                // return authors.find(author => author.id === parent.authorID);
             }
         }
     })
@@ -51,7 +52,7 @@ const AuthorType = new GraphQLObjectType({
         books: {
             type: new GraphQLList(BookType),
             resolve(parent, args) {
-                return books.filter(book => book.authorID === parent.id);
+                // return books.filter(book => book.authorID === parent.id);
             }
         }
     })
@@ -65,7 +66,7 @@ const RootQuery = new GraphQLObjectType({
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
                 console.log(parent);
-                return books.find(book => book.id === args.id);
+                // return books.find(book => book.id === args.id);
             }
         },
         author: {
@@ -73,24 +74,42 @@ const RootQuery = new GraphQLObjectType({
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
                 console.log(parent);
-                return authors.find(author => author.id === args.id);
+                // return authors.find(author => author.id === args.id);
             }
         },
         books: {
             type: new GraphQLList(BookType),
             resolve(parent, args) {
-                return books;
+                // return books;
             }
         },
         authors: {
             type: new GraphQLList(AuthorType),
             resolve(parent, args) {
-                return authors;
+                // return authors;
+            }
+        }
+    }
+});
+
+const Mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+        addAuthor: {
+            type: AuthorType,
+            args: {
+                name: { type: GraphQLString },
+                age: { type: GraphQLInt },
+            },
+            resolve(parent, args) {
+                let author = new Author({ name: args.name, age: args.age });
+                author.save();
             }
         }
     }
 });
 
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: Mutation
 });

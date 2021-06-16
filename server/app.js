@@ -5,9 +5,12 @@ const schema = require('./schemas/schema');
 const mongoose = require('mongoose');
 const app = express();
 
-const url = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cf3uf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
-
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, () => console.log('mongo connected'));
+const url = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cf3uf.mongodb.net/Cluster0?retryWrites=true&w=majority`;
+const options = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+};
+mongoose.connect(url, options, (err) => err ? console.log(err) : console.log('mongo connected'));
 
 app.use('/graphql', graphqlHTTP({
     schema,
