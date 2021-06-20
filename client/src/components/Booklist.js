@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
-import { gql } from 'apollo-boost';
+import { getBooksQuery } from '../queries/Queries';
 import { graphql } from 'react-apollo';
 
 
-const getBooksQuery = gql`
-{
-  books{
-    name
-    id
-  }
-}
-`;
+
 
 export class Booklist extends Component {
 
@@ -25,7 +18,6 @@ export class Booklist extends Component {
 
 
   render() {
-    // console.log(this.props);
     return (
       <div>
         <ul>
