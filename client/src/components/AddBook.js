@@ -10,9 +10,14 @@ export class AddBook extends Component {
             data.authors.map(author => <option key={author.id} value={author.id}>{author.name}</option>);
     }
 
+    submit(e) {
+        e.preventDefault()
+        console.log(e)
+    }
+
     render() {
         return (
-            <form className={style.form}>
+            <form className={style.form} onSubmit={(e) => this.submit(e)}>
                 <div className="field">
                     <label>Book name</label>
                     <input type="text" />
@@ -28,6 +33,7 @@ export class AddBook extends Component {
                         {this.displayOptions()}
                     </select>
                 </div>
+                <button type='submit'>Add book</button>
             </form>
         );
     }

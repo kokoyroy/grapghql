@@ -14,6 +14,7 @@ const getBooksQuery = gql`
 {
   books{
     name
+    genre
     id
   }
 }
