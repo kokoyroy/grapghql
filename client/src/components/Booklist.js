@@ -15,14 +15,7 @@ export class Booklist extends Component {
         book => <li key={book.id}>{book.name}</li>
       ));
   }
-  displayGenre() {
-    let data = this.props.data
-    if (data.loading) {
-      return <h1>loading</h1>
-    } else {
-      return data.books.map(book => <li key={book.id}>{book.genre}</li>)
-    }
-  }
+  
 
 
   render() {
@@ -30,7 +23,6 @@ export class Booklist extends Component {
       <div>
         <ul>
           {this.displayBooks()}
-          {this.displayGenre()}
         </ul>
       </div>
     );

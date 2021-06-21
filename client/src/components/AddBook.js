@@ -4,6 +4,12 @@ import { graphql } from 'react-apollo';
 import style from './AddBook.module.css';
 
 export class AddBook extends Component {
+    state = {
+        bookname: '',
+        genre: '',
+        authorId: ''
+    }
+
     displayOptions() {
         const data = this.props.data;
         return data.loading ? <option>loading</option> :
@@ -12,7 +18,7 @@ export class AddBook extends Component {
 
     submit(e) {
         e.preventDefault()
-        console.log(e)
+        console.log(this.state)
     }
 
     render() {
@@ -20,15 +26,15 @@ export class AddBook extends Component {
             <form className={style.form} onSubmit={(e) => this.submit(e)}>
                 <div className="field">
                     <label>Book name</label>
-                    <input type="text" />
+                    <input onChange={(e) => this.setState({ bookname: e.target.value })} type="text" />
                 </div>
                 <div className="field">
                     <label>Genre</label>
-                    <input type="text" />
+                    <input onChange={(e) => this.setState({ genre: e.target.value })} type="text" />
                 </div>
                 <div className="field">
                     <label>Author</label>
-                    <select >
+                    <select onChange={(e) => this.setState({ authorId: e.target.value })}>
                         <option>Select Author</option>
                         {this.displayOptions()}
                     </select>
