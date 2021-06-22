@@ -13,7 +13,6 @@ const options = {
     useUnifiedTopology: true
 };
 mongoose.connect(url, options, (err) => err ? console.log(err) : console.log('mongo connected'));
-console.log(process.env.DB_USER, process.env.DB_PASS);
 app.use('/graphql', graphqlHTTP({
     schema,
     graphiql: true
